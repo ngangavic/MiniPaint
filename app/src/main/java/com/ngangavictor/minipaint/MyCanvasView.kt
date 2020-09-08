@@ -9,12 +9,14 @@ import androidx.core.content.res.ResourcesCompat
 
 private const val STROKE_WIDTH = 12f
 
-class MyCanvasView(context: Context): View(context) {
+class MyCanvasView(context: Context) : View(context) {
 
     private lateinit var extraCanvas: Canvas
     private lateinit var extraBitmap: Bitmap
+
     private val backgroundColor = ResourcesCompat.getColor(resources, R.color.colorBackground, null)
     private val drawColor = ResourcesCompat.getColor(resources, R.color.colorPaint, null)
+
     private val paint = Paint().apply {
         color = drawColor
         // Smooths out edges of what is drawn without affecting shape.
@@ -27,25 +29,30 @@ class MyCanvasView(context: Context): View(context) {
         strokeWidth = STROKE_WIDTH // default: Hairline-width (really thin)
     }
     private var path = Path()
+
     private var motionTouchEventX = 0f
     private var motionTouchEventY = 0f
+
     private var currentX = 0f
     private var currentY = 0f
+
     private val touchTolerance = ViewConfiguration.get(context).scaledTouchSlop
+
     private lateinit var frame: Rect
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+
         if (::extraBitmap.isInitialized) extraBitmap.recycle()
         extraBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         extraCanvas = Canvas(extraBitmap)
         extraCanvas.drawColor(backgroundColor)
+
         val inset = 5
         frame = Rect(inset, inset, width - inset, height - inset)
     }
 
     override fun onDraw(canvas: Canvas?) {
-//        super.onDraw(canvas)
         canvas!!.drawBitmap(extraBitmap, 0f, 0f, null)
         canvas.drawRect(frame, paint)
     }
@@ -65,6 +72,7 @@ class MyCanvasView(context: Context): View(context) {
     private fun touchStart() {
         path.reset()
         path.moveTo(motionTouchEventX, motionTouchEventY)
+
         currentX = motionTouchEventX
         currentY = motionTouchEventY
     }
@@ -72,10 +80,17 @@ class MyCanvasView(context: Context): View(context) {
     private fun touchMove() {
         val dx = Math.abs(motionTouchEventX - currentX)
         val dy = Math.abs(motionTouchEventY - currentY)
+
         if (dx >= touchTolerance || dy >= touchTolerance) {
             // QuadTo() adds a quadratic bezier from the last point,
             // approaching control point (x1,y1), and ending at (x2,y2).
-            path.quadTo(currentX, currentY, (motionTouchEventX + currentX) / 2, (motionTouchEventY + currentY) / 2)
+            path.quadTo(
+                currentX,
+                currentY,
+                (motionTouchEventX + currentX) / 2,
+                (motionTouchEventY + currentY) / 2
+            )
+
             currentX = motionTouchEventX
             currentY = motionTouchEventY
             // Draw the path in the extra bitmap to cache it.
@@ -87,7 +102,5 @@ class MyCanvasView(context: Context): View(context) {
     private fun touchUp() {
         path.reset()
     }
-
-
 
 }
