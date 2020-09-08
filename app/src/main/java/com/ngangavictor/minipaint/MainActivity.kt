@@ -1,5 +1,7 @@
 package com.ngangavictor.minipaint
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
