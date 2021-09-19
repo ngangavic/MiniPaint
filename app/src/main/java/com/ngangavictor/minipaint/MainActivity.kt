@@ -1,5 +1,6 @@
 package com.ngangavictor.minipaint
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 
             }
             R.id.action_settings -> {
-
+                startActivity(Intent(this, SettingsActivity::class.java))
+                finish()
             }
         }
         return super.onOptionsItemSelected(item)
