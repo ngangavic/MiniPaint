@@ -30,6 +30,19 @@ class MyCanvasView(context: Context) : View(context) {
         strokeCap = Paint.Cap.ROUND // default: BUTT
         strokeWidth = STROKE_WIDTH // default: Hairline-width (really thin)
     }
+
+    private val pen = Paint().apply {
+        color = drawColor
+        // Smooths out edges of what is drawn without affecting shape.
+        isAntiAlias = true
+        // Dithering affects how colors with higher-precision than the device are down-sampled.
+        isDither = true
+        style = Paint.Style.STROKE // default: FILL
+        strokeJoin = Paint.Join.ROUND // default: MITER
+        strokeCap = Paint.Cap.ROUND // default: BUTT
+        strokeWidth = 12f // default: Hairline-width (really thin)
+    }
+
     private var path = Path()
 
     private var motionTouchEventX = 0f
@@ -96,7 +109,7 @@ class MyCanvasView(context: Context) : View(context) {
             currentX = motionTouchEventX
             currentY = motionTouchEventY
             // Draw the path in the extra bitmap to cache it.
-            extraCanvas.drawPath(path, paint)
+            extraCanvas.drawPath(path, pen)
         }
         invalidate()
     }
