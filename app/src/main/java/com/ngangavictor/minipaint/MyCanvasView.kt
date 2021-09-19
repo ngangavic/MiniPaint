@@ -7,15 +7,17 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 
-private const val STROKE_WIDTH = 12f
+private const val STROKE_WIDTH = 1f
 
 class MyCanvasView(context: Context) : View(context) {
 
     private lateinit var extraCanvas: Canvas
     private lateinit var extraBitmap: Bitmap
 
-    private val backgroundColor = ResourcesCompat.getColor(resources, R.color.colorBackground, null)
-    private val drawColor = ResourcesCompat.getColor(resources, R.color.colorPaint, null)
+    var sharedPrefs=SharedPrefs(context)
+
+    private val backgroundColor = Color.parseColor(sharedPrefs.readBackgroundColor("background"))
+    private val drawColor = Color.parseColor(sharedPrefs.readPenColor("pen"))
 
     private val paint = Paint().apply {
         color = drawColor
