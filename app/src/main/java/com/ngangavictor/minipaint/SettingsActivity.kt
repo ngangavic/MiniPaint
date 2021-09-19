@@ -1,6 +1,7 @@
 package com.ngangavictor.minipaint
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
@@ -26,20 +27,20 @@ class SettingsActivity : AppCompatActivity() {
         setSupportActionBar(toolBar)
 
         if (supportActionBar!=null) {
-//        supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
 
+        sharedPrefs= SharedPrefs(this)
+
         imageView = findViewById(R.id.imageView)
         imageView2 = findViewById(R.id.imageView2)
+
+        initImageView()
 
         imageView.setOnClickListener { backgroundColor() }
 
         imageView2.setOnClickListener { penColor() }
 
-
-
-        sharedPrefs= SharedPrefs(this)
 
     }
 
@@ -49,6 +50,11 @@ class SettingsActivity : AppCompatActivity() {
         return true
     }
 
+    private fun initImageView(){
+        imageView.setColorFilter(Color.parseColor(sharedPrefs.readBackgroundColor("background")))
+        imageView2.setColorFilter(Color.parseColor(sharedPrefs.readBackgroundColor("pen")))
+    }
+
     private fun backgroundColor() {
         ColorPickerDialog.Builder(this)
             .setTitle("Pick Background Color")
@@ -56,7 +62,9 @@ class SettingsActivity : AppCompatActivity() {
             .setPositiveButton("OK",
                 object : ColorEnvelopeListener {
                     override fun onColorSelected(envelope: ColorEnvelope?, fromUser: Boolean) {
+
                         sharedPrefs.saveColor("background","#"+envelope!!.hexCode)
+                        initImageView()
                         Toast.makeText(this@SettingsActivity,"Background color set",Toast.LENGTH_LONG).show()
                     }
                 })
@@ -77,6 +85,7 @@ class SettingsActivity : AppCompatActivity() {
                 object : ColorEnvelopeListener {
                     override fun onColorSelected(envelope: ColorEnvelope?, fromUser: Boolean) {
                         sharedPrefs.saveColor("pen","#"+envelope!!.hexCode)
+                        initImageView()
                         Toast.makeText(this@SettingsActivity,"Pen color set",Toast.LENGTH_LONG).show()
                     }
                 })
