@@ -1,20 +1,41 @@
 package com.ngangavictor.minipaint
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
+        val toolBar: Toolbar = findViewById(R.id.toolbar)
+        toolBar.title = "Mini Paint"
+        setSupportActionBar(toolBar)
+
+
+        val linearLayout = findViewById<LinearLayout>(R.id.linearLayout)
         val myCanvasView = MyCanvasView(this)
+        linearLayout.addView(myCanvasView)
+    }
 
-        myCanvasView.systemUiVisibility = SYSTEM_UI_FLAG_FULLSCREEN
-        myCanvasView.contentDescription = getString(R.string.canvasContentDescription)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-        setContentView(myCanvasView)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_save -> {
+
+            }
+            R.id.action_settings -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
